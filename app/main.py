@@ -1,9 +1,12 @@
 from datetime import datetime
+import logging
 
 from app.core.conf import settings
 from app.models.model import *
 from app.utils.send_sms import send_notification
 from app.core.deps import get_db
+
+logger = logging.getLogger(__name__)
 
 
 def check_room_availability(room_id: int, start_time: datetime, end_time: datetime) -> bool:
@@ -16,13 +19,14 @@ def check_room_availability(room_id: int, start_time: datetime, end_time: dateti
 
     if not overlapping_reservations:
         return True
-    else:
-        for reservation in overlapping_reservations:
-            user = reservation.user
-            duration = reservation.end_time - reservation.start_time
-            print(f"Room {room_id} is busy. Reserved by User {user}.")
-            print(f"Reservation duration: {duration}")
-        return False
+    for reservation in overlapping_reservations:
+        user = reservation.user
+        duration = reservation.end_time - reservation.start_time
+
+        message = f"Room {room_id} is busy. Reserved by User {user}.\n"
+        message += f"Reservation duration: {duration}"
+        logger.debug(message)
+    return False
 
 
 def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id: int = 1):
@@ -35,7 +39,8 @@ def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id
     )
     session.add(reservation)
     session.commit()
-    print(f"Room {room_id} reserved successfully!")
+
+    logger.debug(f"Room {room_id} reserved successfully!\n")
 
     user = session.query(User).get(user_id)
     notification_message = f"Room {room_id} has been reserved.\n"
@@ -46,4 +51,4 @@ def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id
 
     if settings.DEBUG:
         send_notification(user.email, user.phone_number, notification_message)
-    print(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
+    logger.debug(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")

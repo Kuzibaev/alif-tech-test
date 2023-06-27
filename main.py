@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 from functools import wraps
 import typer
@@ -8,6 +9,8 @@ from _auto_populate_data.user import create_user
 from _auto_populate_data.room import create_rooms
 
 typer_app = typer.Typer()
+
+logger = logging.getLogger(__name__)
 
 
 @typer_app.command(name='reserve_room')
@@ -27,7 +30,7 @@ def reserve_room(room_id: int = 1, start_time: datetime = utcnow(),
         user_id = int(input("Enter user id: "))
         reserve_room_notify(room_id, start_time, end_time)
     else:
-        print("The room is not empty")
+        logger.debug("The room is not empty")
 
 
 def coro(f):
@@ -44,7 +47,7 @@ def coro(f):
 def auto_populate_data():
     create_rooms()
     create_user()
-    print("Auto populate data saved")
+    logger.debug("Auto populate data saved")
 
 
 if __name__ == "__main__":
