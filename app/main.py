@@ -1,13 +1,10 @@
 from datetime import datetime
-import logging
-import typer
 
 from app.core.conf import settings
-from app.models.model import *
+from app.core.logging import app_logger
+from app.models.models import *
 from app.utils.send_sms import send_notification
 from app.core.deps import get_db
-
-logger = logging.getLogger(__name__)
 
 
 def check_room_availability(room_id: int, start_time: datetime, end_time: datetime) -> bool:
@@ -26,8 +23,7 @@ def check_room_availability(room_id: int, start_time: datetime, end_time: dateti
 
         message = f"Room {room_id} is busy. Reserved by User {user.full_name}.\n"
         message += f"Reservation duration: {duration}"
-        logger.debug(message)
-        typer.echo(message)
+        app_logger.info(message)
     return False
 
 
@@ -42,7 +38,7 @@ def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id
     session.add(reservation)
     session.commit()
 
-    logger.debug(f"Room {room_id} reserved successfully!\n")
+    app_logger.info(f"Room {room_id} reserved successfully!\n")
 
     user = session.query(User).get(user_id)
     notification_message = f"Room {room_id} has been reserved.\n"
@@ -53,5 +49,5 @@ def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id
 
     if not settings.DEBUG:
         send_notification(user.email, user.phone_number, notification_message)
-        logger.debug(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
-    typer.echo(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
+        app_logger.info(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
+    app_logger.info(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")

@@ -1,6 +1,7 @@
 import typer
 
 from app.core.deps import get_db
+from app.core.logging import app_logger
 from app.models import User
 
 DATAS = [
@@ -16,7 +17,7 @@ def create_user():
     db = get_db()
     existing_users = db.query(User).count()
     if existing_users > 0:
-        typer.echo("Users already exist in the database.")
+        app_logger.debug("Users already exist in the database.")
         db.close()
         return
     users = []
@@ -27,6 +28,6 @@ def create_user():
     db.add_all(users)
     db.commit()
 
-    typer.echo("Successfully created users.")
+    app_logger.debug("Successfully created users.")
 
     db.close()

@@ -1,12 +1,9 @@
-import logging
-
 import smtplib
 from email.mime.text import MIMEText
 from twilio.rest import Client
 
 from app.core.conf import settings
-
-logger = logging.getLogger(__name__)
+from app.core.logging import app_logger
 
 
 def send_notification(email: str, phone_number: str, message: str):
@@ -32,9 +29,9 @@ def send_email_notification(email: str, message: str):
             server.starttls()
             server.login(sender_email, sender_password)
             server.send_message(msg)
-            logger.debug(f"Successfully sent message to {receiver_email}")
+            app_logger.info(f"Successfully sent message to {receiver_email}")
     except Exception as e:
-        logger.debug(e)
+        app_logger.error(e)
 
 
 # Twilio
@@ -50,6 +47,6 @@ def send_sms_notification(phone_number: str, message: str):
             from_=twilio_number,
             to=phone_number
         )
-        logger.debug(f"Successfully sent message to {phone_number}")
+        app_logger.info(f"Successfully sent message to {phone_number}")
     except Exception as e:
-        logger.debug(e)
+        app_logger.error(e)

@@ -1,6 +1,5 @@
-import typer
-
 from app.core.deps import get_db
+from app.core.logging import app_logger
 from app.models import Room
 
 
@@ -8,7 +7,7 @@ def create_rooms(total_rooms: int = 5) -> None:
     db = get_db()
     existing_rooms = db.query(Room).count()
     if existing_rooms > 0:
-        typer.echo("Rooms already exist in the database.")
+        app_logger.info("Rooms already exist in the database.")
         db.close()
         return
 
@@ -20,6 +19,6 @@ def create_rooms(total_rooms: int = 5) -> None:
     db.add_all(rooms)
     db.commit()
 
-    typer.echo(f"Successfully created {total_rooms} rooms.")
+    app_logger.info(f"Successfully created {total_rooms} rooms.")
 
     db.close()

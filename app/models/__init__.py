@@ -1,2 +1,2 @@
 from .base import BaseClass
-from .model import *  # NoQA
+from .models import *  # NoQA
