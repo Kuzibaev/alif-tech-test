@@ -8,12 +8,13 @@ from pydantic import BaseSettings, validator, PostgresDsn
 APP_DIR = Path(__file__).parent.parent
 BASE_DIR = APP_DIR.parent
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
+SECRET_KEY = os.getenv('SECRET_KEY', 'secret-key')
 
 
 class Settings(BaseSettings):
     # Project Config
     PROJECT_NAME: str = 'Alif Tech Test Project'
-    SECRET_KEY: str = 'secret-key'
+    SECRET_KEY: str = SECRET_KEY
 
     # DB Config
     DB_USER: str
