@@ -14,6 +14,7 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 class Settings(BaseSettings):
     # Project Config
     PROJECT_NAME: str = 'Alif Tech Test Project'
+    SECRET_KEY: str = 'secret-key'
 
     # DB Config
     DB_USER: str

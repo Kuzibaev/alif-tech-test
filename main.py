@@ -1,21 +1,18 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
-
 import typer
 
+from app.main import check_room_availability, reserve_room as reserve_room_notify
+from app.utils.datetime import utcnow
 from _auto_populate_data.user import create_user
 from _auto_populate_data.room import create_rooms
-
-from app.main import (
-    check_room_availability,
-    reserve_room as reserve_room_notify
-)
 
 typer_app = typer.Typer()
 
 
 @typer_app.command(name='reserve_room')
-def reserve_room(room_id: int, start_time: datetime, end_time: datetime) -> None:
+def reserve_room(room_id: int = 1, start_time: datetime = utcnow(),
+                 end_time: datetime = utcnow() + timedelta(hours=2)) -> None:
     """
     Reserve a room in the office.
 

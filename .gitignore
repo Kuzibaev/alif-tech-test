@@ -71,8 +71,10 @@ fabric.properties
 modules.xml
 .idea/misc.xml
 *.ipr
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 
 .env
 .venv

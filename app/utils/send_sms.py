@@ -10,6 +10,7 @@ def send_notification(email: str, phone_number: str, message: str):
     send_sms_notification(phone_number, message)
 
 
+# Email Notification
 def send_email_notification(email: str, message: str):
     smtp_server = settings.SMTP_SERVER
     smtp_port = 587
@@ -22,10 +23,13 @@ def send_email_notification(email: str, message: str):
     msg['From'] = sender_email
     msg['To'] = receiver_email
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.send_message(msg)
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"Failed to send email: {e}")
 
 
 # Twilio
@@ -34,9 +38,12 @@ def send_sms_notification(phone_number: str, message: str):
     auth_token = settings.AUTH_TOKEN
     twilio_number = settings.TWILIO_NUMBER
 
-    client = Client(account_sid, auth_token)
-    client.messages.create(
-        body=message,
-        from_=twilio_number,
-        to=phone_number
-    )
+    try:
+        client = Client(account_sid, auth_token)
+        client.messages.create(
+            body=message,
+            from_=twilio_number,
+            to=phone_number
+        )
+    except Exception as e:
+        print(f"Failed to send SMS: {e}")
