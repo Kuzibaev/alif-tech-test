@@ -27,7 +27,6 @@ def reserve_room(room_id: int = 1, start_time: datetime = utcnow(),
 
     available = check_room_availability(room_id, start_time, end_time)
     if available:
-        user_id = int(input("Enter user id: "))
         reserve_room_notify(room_id, start_time, end_time)
     else:
         logger.debug("The room is not empty")
