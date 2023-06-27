@@ -1,7 +1,7 @@
 ## Using Asyncio with Alembic
 
 ```shell
-alembic init alembic
+alembic init alembic -t directory
 ```
 
 ## Alembic auto generate migrations
