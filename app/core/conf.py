@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any
 
 import pytz
-from eskiz_sms import EskizSMS
 from pydantic import BaseSettings, validator, PostgresDsn
 
 APP_DIR = Path(__file__).parent.parent
