@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import typer
 
 from app.core.conf import settings
 from app.models.model import *
@@ -23,9 +24,10 @@ def check_room_availability(room_id: int, start_time: datetime, end_time: dateti
         user = reservation.user
         duration = reservation.end_time - reservation.start_time
 
-        message = f"Room {room_id} is busy. Reserved by User {user}.\n"
+        message = f"Room {room_id} is busy. Reserved by User {user.full_name}.\n"
         message += f"Reservation duration: {duration}"
         logger.debug(message)
+        typer.echo(message)
     return False
 
 
@@ -49,6 +51,7 @@ def reserve_room(room_id: int, start_time: datetime, end_time: datetime, user_id
     notification_message += f"Time: {start_time.time()} - {end_time.time()}\n"
     notification_message += f"Room Number: {room_id}"
 
-    if settings.DEBUG:
+    if not settings.DEBUG:
         send_notification(user.email, user.phone_number, notification_message)
-    logger.debug(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
+        logger.debug(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")
+    typer.echo(f"Sent message to Email:{user.email} and Phone:{user.phone}.\n {notification_message}")

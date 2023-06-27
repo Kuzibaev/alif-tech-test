@@ -1,7 +1,6 @@
 import typer
 
 from app.core.deps import get_db
-from app.core.sessions import Session
 from app.models import User
 
 DATAS = [

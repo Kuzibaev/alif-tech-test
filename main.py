@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 @typer_app.command(name='reserve_room')
-def reserve_room(room_id: int = 1, start_time: datetime = utcnow(),
-                 end_time: datetime = utcnow() + timedelta(hours=1)) -> None:
+def reserve_room(room_id: int = 1, start_time: datetime = utcnow() + timedelta(hours=1),
+                 end_time: datetime = utcnow() + timedelta(hours=2)) -> None:
     """
     Reserve a room in the office.
 
@@ -47,6 +47,7 @@ def auto_populate_data():
     create_rooms()
     create_user()
     logger.debug("Auto populate data saved")
+    typer.echo("Auto populate data saved")
 
 
 if __name__ == "__main__":
