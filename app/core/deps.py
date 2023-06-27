@@ -21,7 +21,7 @@ def set_db():
 
 
 def get_db() -> Session:
-    session = session_context_var.get()
+    session = Session()
     if session is None:
         raise Exception("Session is missing")
     return session
