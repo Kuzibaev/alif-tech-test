@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @typer_app.command(name='reserve_room')
 def reserve_room(room_id: int = 1, start_time: datetime = utcnow(),
-                 end_time: datetime = utcnow() + timedelta(hours=2)) -> None:
+                 end_time: datetime = utcnow() + timedelta(hours=1)) -> None:
     """
     Reserve a room in the office.
 
